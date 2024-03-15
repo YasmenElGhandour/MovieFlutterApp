@@ -7,13 +7,14 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
     @GET(Constants.MOVIES_END_POINT)
-    suspend fun getMovies(@Path("api_key") apiKey: String):Response<AllMoviesModel>
+    suspend fun getMovies(@Query("api_key")  apiKey:String):Response<AllMoviesModel>
 
     @GET(Constants.MOVIE_DETAILS_END_POINT)
-    suspend fun getMovieDetails(@Path("movie_id") movieId: Int, @Path("api_key") apiKey: String):Response<MovieDetailsModel>
+    suspend fun getMovieDetails(@Path("movie_id") movieId: Int, @Query("api_key") apiKey: String):Response<MovieDetailsModel>
 
 }

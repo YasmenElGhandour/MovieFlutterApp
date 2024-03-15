@@ -57,7 +57,7 @@ class MainActivity:  FlutterFragmentActivity()  {
                 if(response != null){
                     result.success(Gson().toJson(response).toString())
                 }else{
-                    result.error("400","not found",null)
+                    result.error("error","error",null)
                 }
             }
         })
@@ -73,7 +73,7 @@ class MainActivity:  FlutterFragmentActivity()  {
                 if(detailsResponse != null){
                     result.success(Gson().toJson(detailsResponse).toString())
                 }else{
-                    result.error("400","not found",null)
+                    result.error("error","error",null)
                 }
             }
         })
