@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/helpers/constants.dart';
 
@@ -21,8 +22,8 @@ class DiscoverSliderItem extends StatelessWidget {
           child: Stack(
             alignment :AlignmentDirectional.bottomCenter,
             children: [
-              Image.network(
-                '${Constants.IMAGES_BASE_URL}${data.posterPath}',
+          CachedNetworkImage(
+              imageUrl: '${Constants.IMAGES_BASE_URL}${data.posterPath}',
                 filterQuality: FilterQuality.high,
                 height: 300.0,
                 width: 300,

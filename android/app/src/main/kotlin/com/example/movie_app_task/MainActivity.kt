@@ -1,17 +1,24 @@
 package com.example.movie_app_task
 
-
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
-import com.example.movie_app_task.helpers.Constants
+import androidx.lifecycle.viewModelScope
 import com.example.movie_app_task.models.details_models.MovieDetailsModel
 import com.example.movie_app_task.models.discover_models.AllMoviesModel
 import com.example.movie_app_task.viewmodel.MoviesViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.ViewModelLifecycle
+import dagger.hilt.android.scopes.ViewModelScoped
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+
 
 @AndroidEntryPoint
 class MainActivity:  FlutterFragmentActivity()  {
@@ -27,57 +34,66 @@ class MainActivity:  FlutterFragmentActivity()  {
                 val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
                 val apiKey = hashMap["apiKey"]
                 apiKey?.let {
-                    getAllMovies(result, it as String)
+                     getAllMovies(result, it as String)
+
                 }
-            }
-            else if (call.method == "getDetails"){
+            }else if (call.method == "getDetails"){
                 val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
                 val apiKey = hashMap["apiKey"]
                 val movieId = hashMap["movieId"]
                 apiKey.let { apiKey
                     movieId?.let { movieId
-                        getMovieDetails(result , movieId as Int ,apiKey as String )
+                     getMovieDetails(result , movieId as Int ,apiKey as String )
+
                     }
                 }
 
-
-            } else{
-                result.notImplemented()
             }
+            else{
+                result.notImplemented()
 
+            }
         }
     }
 
-    fun getAllMovies(result: MethodChannel.Result, apiKey : String): AllMoviesModel? {
+    fun getAllMovies(result: MethodChannel.Result, apiKey : String) {
          viewModel.getMovies(apiKey)
-        var response: AllMoviesModel? = null
         viewModel.responseDiscoverMovies.observe(this, { moviesResponse ->
             moviesResponse?.let {
-                response = it
-                if(response != null){
-                    result.success(Gson().toJson(response).toString())
+                it
+                if(it != null){
+                        result.success(Gson().toJson(it).toString())
+
                 }else{
                     result.error("error","error",null)
                 }
             }
         })
-        return response
     }
 
-    fun getMovieDetails(result: MethodChannel.Result , movieId : Int,apiKey : String): MovieDetailsModel? {
-        viewModel.getDetailsMovie(movieId =movieId, apiKey =  apiKey)
+    fun getMovieDetails(result: MethodChannel.Result , movieId : Int,apiKey : String) {
+        viewModel.getDetailsMovie(movieId,apiKey)
         var detailsResponse: MovieDetailsModel? = null
         viewModel.responseDetailsMovie.observe(this, { MovieDetailsResponse ->
             MovieDetailsResponse?.let {
                 detailsResponse = it
                 if(detailsResponse != null){
-                    result.success(Gson().toJson(detailsResponse).toString())
+                        result.success(Gson().toJson(detailsResponse).toString())
                 }else{
                     result.error("error","error",null)
                 }
             }
         })
-        return detailsResponse
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        println("kkkkkk")
     }
 
 }

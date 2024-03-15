@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -53,8 +54,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // title: Text('${widget.movie?.title}',
                 //   style: TextStyle(fontFamily: 'AABB', fontSize: 16, color: Colors.white),
                 // ),
-                background: Image.network(
-                  '${Constants.IMAGES_BASE_URL}${widget.movie?.backdropPath}',
+                background:
+                  CachedNetworkImage(
+                    imageUrl: '${Constants.IMAGES_BASE_URL}${widget.movie?.posterPath}',
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.cover,
                 ),

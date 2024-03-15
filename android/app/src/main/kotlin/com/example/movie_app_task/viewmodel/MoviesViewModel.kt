@@ -40,7 +40,7 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
     }
 
      fun getDetailsMovie(movieId:Int , apiKey:String) = viewModelScope.launch {
-        repository.getMovieDetails(movieId = movieId, apiKey).let { response ->
+         repository.getMovieDetails(movieId = movieId, apiKey).let { response ->
             if (response.isSuccessful) {
                 _detailsMovieResponse.postValue(response.body())
                   Log.d("Testviewmodel" , "${response.body()}")

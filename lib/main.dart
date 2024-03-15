@@ -31,69 +31,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-//
-//   final String title;
-//
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   String _responseFromNativeCode = 'no data';
-//   static const platform=MethodChannel("com.example.movie_app_task/native");
-//
-//   // Future<void> getData() async{
-//   //   String message;
-//   //   try{
-//   //     message = await platform.invokeMethod("getDataFromNativeCode");
-//   //   }on PlatformException catch(e){
-//   //     message = 'failed to get message ${e.message}';
-//   //   }
-//   //   setState(() {
-//   //     _responseFromNativeCode = message;
-//   //   });
-//   //
-//   // }
-//
-//   // Future<void> getDetails() async{
-//   //   String message;
-//   //   try{
-//   //      message = await platform.invokeMethod("getDetails" , {"movieId":848538});
-//   //   }on PlatformException catch(e){
-//   //     message = 'failed to get message ${e.message}';
-//   //   }
-//   //
-//   //   setState(() {
-//   //     _responseFromNativeCode = message;
-//   //   });
-//   //
-//   // }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//         title: Text(widget.title),
-//
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//              Text(_responseFromNativeCode,maxLines: 4, ),
-//             ElevatedButton(onPressed: getDetails, child: Text(
-//               'get data'
-//             ))
-//           ],
-//         ),
-//       ),
-// // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
-// }
 
 class MyHttpOverrides extends HttpOverrides{
   @override
