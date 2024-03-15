@@ -14,6 +14,6 @@ interface ApiService {
     suspend fun getMovies(@Path("api_key") apiKey: String):Response<AllMoviesModel>
 
     @GET(Constants.MOVIE_DETAILS_END_POINT)
-    suspend fun getMovieDetails(@Path("movie_id") movieId: Int):Response<MovieDetailsModel>
+    suspend fun getMovieDetails(@Path("movie_id") movieId: Int, @Path("api_key") apiKey: String):Response<MovieDetailsModel>
 
 }

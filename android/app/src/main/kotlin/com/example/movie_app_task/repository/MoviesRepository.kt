@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(private val apiService: ApiService) {
     suspend fun getDiscoverMovies(apiKey: String) = apiService.getMovies(apiKey = apiKey)
-    suspend fun getMovieDetails(movieId: Int) = apiService.getMovieDetails(movieId = movieId)
+    suspend fun getMovieDetails(movieId: Int,apiKey: String) = apiService.getMovieDetails(movieId = movieId,apiKey = apiKey)
 
 }

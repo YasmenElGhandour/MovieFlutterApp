@@ -24,14 +24,22 @@ class MainActivity:  FlutterFragmentActivity()  {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
                 call, result ->
             if(call.method == "getDataFromNativeCode"){
-                getAllMovies(result)
+                val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
+                val apiKey = hashMap["apiKey"]
+                apiKey?.let {
+                    getAllMovies(result, it as String)
+                }
             }
             else if (call.method == "getDetails"){
                 val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
+                val apiKey = hashMap["apiKey"]
                 val movieId = hashMap["movieId"]
-                movieId?.let {
-                    getMovieDetails(result , it as Int)
+                apiKey.let { apiKey
+                    movieId?.let { movieId
+                        getMovieDetails(result , movieId as Int ,apiKey as String )
+                    }
                 }
+
 
             } else{
                 result.notImplemented()
@@ -40,8 +48,8 @@ class MainActivity:  FlutterFragmentActivity()  {
         }
     }
 
-    fun getAllMovies(result: MethodChannel.Result): AllMoviesModel? {
-         viewModel.getMovies(Constants.API_KEY)
+    fun getAllMovies(result: MethodChannel.Result, apiKey : String): AllMoviesModel? {
+         viewModel.getMovies(apiKey)
         var response: AllMoviesModel? = null
         viewModel.responseDiscoverMovies.observe(this, { moviesResponse ->
             moviesResponse?.let {
@@ -56,8 +64,8 @@ class MainActivity:  FlutterFragmentActivity()  {
         return response
     }
 
-    fun getMovieDetails(result: MethodChannel.Result , movieId : Int): MovieDetailsModel? {
-        viewModel.getDetailsMovie(movieId =movieId )
+    fun getMovieDetails(result: MethodChannel.Result , movieId : Int,apiKey : String): MovieDetailsModel? {
+        viewModel.getDetailsMovie(movieId =movieId, apiKey =  apiKey)
         var detailsResponse: MovieDetailsModel? = null
         viewModel.responseDetailsMovie.observe(this, { MovieDetailsResponse ->
             MovieDetailsResponse?.let {
