@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/helpers/constants.dart';
+import 'package:movie_app_task/core/theme/colors.dart';
 
 import '../../data/models/discover_models.dart';
 import '../screens/details_screen.dart';
@@ -28,7 +29,17 @@ class DiscoverSliderItem extends StatelessWidget {
                 height: 300.0,
                 width: 300,
                 fit: BoxFit.cover,
-              ),
+              placeholder: (context, url) => Container(
+                height: 300,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colours.PrimarLightColor,
+
+                  ),
+                  ),
+
+          ),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
