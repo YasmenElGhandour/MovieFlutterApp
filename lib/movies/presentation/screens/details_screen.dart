@@ -8,7 +8,6 @@ import 'package:movie_app_task/movies/data/models/discover_models.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/helpers/constants.dart';
 import '../../../core/helpers/enums.dart';
-import '../../data/Api/api.dart';
 import '../../data/models/details_movie_models.dart';
 import '../../domain/usecases/movie_details_usecase.dart';
 import '../controller/movie_details_bloc.dart';
@@ -21,11 +20,11 @@ final DiscoverMovies movie;
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  late Future<DetailsMovieModels> detailsMovies;
+  // late Future<DetailsMovieModels> detailsMovies;
   @override
   void initState() {
     super.initState();
-    detailsMovies = Api().getDetailsMovie(widget.movie!.id!);
+    // detailsMovies = Api().getDetailsMovie(widget.movie!.id!);
   }
 
   @override

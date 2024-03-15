@@ -5,7 +5,6 @@ import 'package:movie_app_task/core/theme/colors.dart';
 
 import '../../../core/di/injectable.dart';
 import '../../../core/helpers/enums.dart';
-import '../../data/Api/api.dart';
 import '../../data/models/discover_models.dart';
 import '../../domain/usecases/discover_movie_usecase.dart';
 import '../controller/discover_movie_bloc.dart';
@@ -23,14 +22,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<DiscoverMovies>> discoverMovies;
+  // late Future<List<DiscoverMovies>> discoverMovies;
   String _responseFromNativeCode = 'no data';
   static const platform = MethodChannel("com.example.movie_app_task/native");
 
   @override
   void initState() {
     super.initState();
-    discoverMovies = Api().getDiscoverMovies();
+    // discoverMovies = Api().getDiscoverMovies();
   }
 
   @override
