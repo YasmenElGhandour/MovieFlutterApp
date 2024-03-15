@@ -1,16 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
+import 'package:movie_app_task/movies/data/models/discover_models.dart';
 import 'package:movie_app_task/movies/presentation/widgets/discover_slider_item.dart';
 
 
 class DiscoverMoviesSlider extends StatelessWidget {
   const DiscoverMoviesSlider({
-    super.key,
-    required this.snapshot
+    super.key, required this.moviesList,
   });
 
-  final AsyncSnapshot snapshot;
+ // final AsyncSnapshot snapshot;
+   final List<DiscoverMovies> moviesList;
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class DiscoverMoviesSlider extends StatelessWidget {
                 width: 300,
                 height: 300,
                 color: Colours.PrimaryColor,
-                child: DiscoverSliderItem(data: snapshot.data[itemIndex],),
+                child: DiscoverSliderItem(data: moviesList[itemIndex],),
               ),
             );
           },

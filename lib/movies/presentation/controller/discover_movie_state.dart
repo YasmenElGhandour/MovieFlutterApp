@@ -5,24 +5,25 @@ import '../../data/models/discover_models.dart';
 
 
 class MoviesState extends Equatable {
-  final List<DiscoverMovies> discoverMovies;
+  final List<DiscoverMovies>? discoverMovies;
   final RequestState discoverRequestState;
   final String discoverMessage;
 
   const MoviesState({
-    this.discoverMovies = const [],
+     this.discoverMovies,
     this.discoverRequestState = RequestState.isLoading,
-    this.discoverMessage = "",
+    this.discoverMessage = '',
 
   });
 
-  copyWith({
+  MoviesState  copyWith({
     List<DiscoverMovies>? discoverMovies,
     RequestState? discoverRequestState,
     String? discoverMessage,
   }) {
     return MoviesState(
       discoverMovies: discoverMovies ?? this.discoverMovies,
+      discoverRequestState: discoverRequestState ?? this.discoverRequestState,
       discoverMessage: discoverMessage ?? this.discoverMessage,
     );
   }
@@ -30,5 +31,7 @@ class MoviesState extends Equatable {
   @override
   List<Object?> get props => [
     discoverMovies,
+    discoverRequestState,
+    discoverMessage
   ];
 }

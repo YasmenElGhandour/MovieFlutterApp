@@ -2,10 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 import 'dart:io';
+import 'core/di/injectable.dart';
 import 'movies/presentation/screens/home_screen.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  // Dependency injection (injectable)
+  configureDependencies();
   runApp(const MyApp());
 }
 

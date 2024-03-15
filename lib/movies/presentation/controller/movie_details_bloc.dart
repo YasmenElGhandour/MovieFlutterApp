@@ -1,6 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../core/helpers/enums.dart';
 import '../../data/models/details_movie_models.dart';
@@ -9,6 +10,7 @@ import '../../domain/usecases/movie_details_usecase.dart';
 part 'movie_details_event.dart';
 part 'movie_details_state.dart';
 
+@Injectable()
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   final MovieDetailsUseCase movieDetailsUseCase;
   MovieDetailsBloc(this.movieDetailsUseCase) : super(const MovieDetailsState()) {

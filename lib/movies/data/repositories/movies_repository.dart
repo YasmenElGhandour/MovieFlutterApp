@@ -1,5 +1,6 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../core/error/exceptions.dart';
 import '../../../core/error/failure.dart';
@@ -8,6 +9,7 @@ import '../data_source/movies_data_source.dart';
 import '../models/details_movie_models.dart';
 import '../models/discover_models.dart';
 
+@Injectable(as: MoviesRepository)
 class MoviesRepositoryImpl extends MoviesRepository {
   final MovieDataSource moviesDataSource;
   MoviesRepositoryImpl(this.moviesDataSource);

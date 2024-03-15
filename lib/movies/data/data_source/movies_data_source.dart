@@ -1,5 +1,6 @@
 
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'dart:convert';
 import '../../../core/error/error_message_model.dart';
 import '../../../core/error/exceptions.dart';
@@ -12,6 +13,7 @@ abstract class MovieDataSource {
 
 }
 
+@Injectable(as: MovieDataSource)
 class MovieDataSourceImpl extends MovieDataSource {
   @override
   Future<List<DiscoverMovies>> getDiscoverMovies(String apiKey)async {
