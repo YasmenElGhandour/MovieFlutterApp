@@ -38,6 +38,15 @@ class DiscoverSliderItem extends StatelessWidget {
 
                   ),
                   ),
+            errorWidget: (context, url, error) => Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colours.PrimarLightColor,
+              ),
+              child: Icon(Icons.error),
+            ),
 
           ),
               Column(

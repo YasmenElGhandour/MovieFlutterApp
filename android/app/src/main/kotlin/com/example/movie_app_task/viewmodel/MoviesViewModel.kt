@@ -29,31 +29,44 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
 
 
     fun getMovies(apiKey: String) = viewModelScope.launch {
-        repository.getDiscoverMovies(apiKey)?.let { response ->
-            if (response.isSuccessful) {
-                _discoverMoviesResponse.postValue(response.body())
-                Log.d("Testviewmodel" , "${response.body()?.results?.get(0)}")
+        try {
+            repository.getDiscoverMovies(apiKey)?.let { response ->
+                if (response.isSuccessful) {
+                    _discoverMoviesResponse.postValue(response.body())
+                    Log.d("Testviewmodel" , "${response.body()?.results?.get(0)}")
 
-            } else {
-                _discoverMoviesResponse.postValue(null)
-                Log.d("tag", "getAllMovies Error: ${response.code()}")
+                } else {
+                    _discoverMoviesResponse.postValue(null)
+                    Log.d("tag", "getAllMovies Error: ${response.code()}")
+                }
+                responseCode = response.code()
+
             }
-            responseCode = response.code()
+        }catch (e:Exception){
+
+            Log.d("ExceptionError", "getAllMovies Error: ${e.cause.toString()}")
+            responseCode = 600
 
         }
+
     }
 
      fun getDetailsMovie(movieId:Int , apiKey:String) = viewModelScope.launch {
-         repository.getMovieDetails(movieId = movieId, apiKey)?.let { response ->
-            if (response.isSuccessful) {
-                _detailsMovieResponse.postValue(response.body())
-                  Log.d("yasmenmmmm" , "${response.body()?.title}")
+         try {
+             repository.getMovieDetails(movieId = movieId, apiKey)?.let { response ->
+                 if (response.isSuccessful) {
+                     _detailsMovieResponse.postValue(response.body())
 
-            } else {
-                _detailsMovieResponse.postValue(null)
-                Log.d("tag", "getAllMovies Error: ${response.code()}")
-            }
-             responseCode = response.code()
+                 } else {
+                     _detailsMovieResponse.postValue(null)
+                     Log.d("tag", "getAllMovies Error: ${response.code()}")
+                 }
+                 responseCode = response.code()
+             }
+         }catch (e:Exception){
+             Log.d("ExceptionError", "getAllMovies Error: ${e.cause.toString()}")
+             responseCode = 600
+
          }
     }
 

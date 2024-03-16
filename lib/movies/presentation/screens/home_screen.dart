@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +8,6 @@ import 'package:movie_app_task/core/theme/colors.dart';
 
 import '../../../core/di/injectable.dart';
 import '../../../core/helpers/enums.dart';
-import '../../data/models/discover_models.dart';
 import '../../domain/usecases/discover_movie_usecase.dart';
 import '../controller/discover_movie_bloc.dart';
 import '../controller/discover_movie_event.dart';
@@ -13,6 +15,9 @@ import '../controller/discover_movie_state.dart';
 import '../widgets/continue_watching_banner.dart';
 import '../widgets/discover_slider.dart';
 import '../../../core/helpers/constants.dart';
+import '../widgets/loading.dart';
+import '../widgets/no_data.dart';
+import '../widgets/no_internet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,19 +27,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // late Future<List<DiscoverMovies>> discoverMovies;
-  String _responseFromNativeCode = 'no data';
-  static const platform = MethodChannel("com.example.movie_app_task/native");
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
-  @override
-  void initState() {
-    super.initState();
-    // discoverMovies = Api().getDiscoverMovies();
-  }
 
   @override
   Widget build(BuildContext context) {
-
     return BlocProvider(
         create: (context) => MoviesBloc(getIt<DiscoverMoviesUseCase>())..add(DiscoverMoviesEvent(Constants.API_KEY)),
         child: Scaffold(
@@ -107,18 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  Future<void> getData() async {
-    String message;
-    try {
-      message = await platform.invokeMethod("getDataFromNativeCode");
-    } on PlatformException catch (e) {
-      message = 'failed to get message ${e.message}';
-    }
-    setState(() {
-      _responseFromNativeCode = message;
-    });
-  }
-
   buildCarouselBloc() {
     return  BlocBuilder<MoviesBloc , MoviesState>(
       buildWhen: (previousState, currentState) =>
@@ -126,32 +113,63 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context, MoviesState state) {
         switch (state.discoverRequestState) {
           case RequestState.isLoading:
-            return const SizedBox(
-              height: 200,
-              child: Center(
-                child: CircularProgressIndicator(color: Colours.SecondryColor,),
-              ),
-            );
+            //no cached data && no internet
+          if(_connectionStatus == ConnectivityResult.none){
+            return state.discoverMovies?.length != 0 && state.discoverMovies?.length != null ? SizedBox(): NoInternet();
+          }
+          else  return loading();
           case RequestState.isLoaded:
             if(state.discoverMovies?.length != 0)
             return DiscoverMoviesSlider(moviesList: state.discoverMovies!);
-            else  return SizedBox(
-              height: 400,
-              child: Text(
-                'No Data',
-              )
-            );
+            else  return NoData('No data');
           case RequestState.isError:
-            return SizedBox(
-              height: 400,
-              child: Text(
-                state.discoverMessage,
-              ),
-            );
+            return  NoData('${state.discoverMessage}');
+
         }
       },
 
     );
 
   }
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      // developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+
 }
+
+
+
+
