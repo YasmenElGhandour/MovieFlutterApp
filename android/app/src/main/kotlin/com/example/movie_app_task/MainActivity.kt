@@ -6,7 +6,6 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.*
 import com.example.movie_app_task.models.details_models.MovieDetailsModel
 import com.example.movie_app_task.viewmodel.MoviesViewModel
-import com.example.movie_app_task.viewmodel.observeOnce
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import io.flutter.embedding.android.FlutterFragmentActivity
