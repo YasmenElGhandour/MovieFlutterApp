@@ -5,14 +5,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 import 'package:movie_app_task/movies/data/models/discover_models.dart';
 
 import '../../../core/di/injectable.dart';
 import '../../../core/helpers/constants.dart';
 import '../../../core/helpers/enums.dart';
-import '../../data/models/details_movie_models.dart';
 import '../../domain/usecases/movie_details_usecase.dart';
 import '../controller/movie_details_bloc.dart';
 import '../widgets/loading.dart';
