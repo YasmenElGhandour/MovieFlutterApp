@@ -59,13 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 18,
                               color: Colours.SecondryColor),
                           children: <TextSpan>[
-                        TextSpan(
-                            text: ' Everywhere',
-                            style: TextStyle(
-                                fontFamily: 'AABB',
-                                fontSize: 18,
-                                color: Colours.WhiteColor)),
-                      ])),
+                            TextSpan(
+                                text: ' Everywhere',
+                                style: TextStyle(
+                                    fontFamily: 'AABB',
+                                    fontSize: 18,
+                                    color: Colours.WhiteColor)),
+                          ])),
                 ),
                 SizedBox(
                   height: 8,
@@ -114,13 +114,13 @@ class _HomeScreenState extends State<HomeScreen> {
         var data = state.discoverMovies;
         switch (state.discoverRequestState) {
           case RequestState.isLoading:
-            //no cached data && no internet
-          if(_connectionStatus == ConnectivityResult.none){
-            return  data == null ? NoInternet() : SizedBox();
-          } else  return loading();
+          //no cached data && no internet
+            if(_connectionStatus == ConnectivityResult.none){
+              return  data == null ? NoInternet() : SizedBox();
+            } else  return loading();
           case RequestState.isLoaded:
             if(state.discoverMovies?.length != 0)
-            return DiscoverMoviesSlider(moviesList: state.discoverMovies!);
+              return DiscoverMoviesSlider(moviesList: state.discoverMovies!);
             else  return NoData('No data');
           case RequestState.isError:
             return  NoData('${state.discoverMessage}');
@@ -169,7 +169,3 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 }
-
-
-
-
