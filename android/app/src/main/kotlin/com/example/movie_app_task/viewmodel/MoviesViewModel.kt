@@ -1,15 +1,15 @@
 package com.example.movie_app_task.viewmodel
 
+import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.MainThread
+import androidx.lifecycle.*
 import com.example.movie_app_task.models.details_models.MovieDetailsModel
 import com.example.movie_app_task.models.discover_models.AllMoviesModel
 import com.example.movie_app_task.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +22,7 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
         get() = _discoverMoviesResponse
 
 
-    private val _detailsMovieResponse = MutableLiveData<MovieDetailsModel>()
+     val _detailsMovieResponse = MutableLiveData<MovieDetailsModel>()
     val responseDetailsMovie: LiveData<MovieDetailsModel>
         get() = _detailsMovieResponse
 
@@ -43,13 +43,14 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
          repository.getMovieDetails(movieId = movieId, apiKey).let { response ->
             if (response.isSuccessful) {
                 _detailsMovieResponse.postValue(response.body())
-                  Log.d("Testviewmodel" , "${response.body()}")
+                  Log.d("yasmenmmmm" , "${response.body()?.title}")
 
             } else {
                 Log.d("tag", "getAllMovies Error: ${response.code()}")
             }
         }
     }
+
 
 
 }

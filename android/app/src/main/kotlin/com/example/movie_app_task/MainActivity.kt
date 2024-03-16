@@ -1,10 +1,12 @@
 package com.example.movie_app_task
 
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.movie_app_task.models.details_models.MovieDetailsModel
 import com.example.movie_app_task.viewmodel.MoviesViewModel
+import com.example.movie_app_task.viewmodel.observeOnce
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -21,6 +23,7 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
 
     private val CHANNEL = "com.example.movie_app_task/native"
 
+
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler(this)
@@ -32,7 +35,7 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
             moviesResponse?.let {
                 it
                 if(it != null){
-                        result.success(Gson().toJson(it).toString())
+                    result.success(Gson().toJson(it).toString())
 
                 }else{
                     result.error("error","error",null)
@@ -41,28 +44,20 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
         })
     }
 
-     fun getMovieDetails(result: MethodChannel.Result, movieId : Int, apiKey : String) {
+    fun getMovieDetails(result: MethodChannel.Result, movieId : Int, apiKey : String) {
+        var setResult=true
+        viewModel._detailsMovieResponse.value=null
         viewModel.getDetailsMovie(movieId,apiKey)
-        var detailsResponse: MovieDetailsModel? = null
         viewModel.responseDetailsMovie.observe(this, { MovieDetailsResponse ->
             MovieDetailsResponse?.let {
-                detailsResponse = it
-                if(detailsResponse != null){
-                    result?.let {
-                      result.success(Gson().toJson(detailsResponse).toString())
-
-                    }
-                }else{
-                    result.error("error","error",null)
-                }
+               if(setResult)
+                  result.success(Gson().toJson(it).toString())
+               setResult=false
             }
         })
 
 
-
     }
-
-
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if(call.method == "getDataFromNativeCode"){
@@ -76,11 +71,10 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
             val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
             val apiKey = hashMap["apiKey"]
             val movieId = hashMap["movieId"]
-            apiKey.let { apiKey
+            apiKey?.let { apiKey
                 movieId?.let { movieId
-                    getMovieDetails(result, movieId as Int ,apiKey as String )
-
-                }
+                        getMovieDetails(result, movieId as Int ,apiKey as String )
+                   }
             }
 
         }
@@ -89,8 +83,6 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
 
         }
     }
-
-
 
 
 }
