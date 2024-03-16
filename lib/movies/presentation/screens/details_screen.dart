@@ -38,7 +38,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           slivers: [
             SliverAppBar.medium(
               backgroundColor: Colours.PrimaryColor,
-              expandedHeight: 300,
+              expandedHeight: 400,
               pinned: true,
               floating: true,
               leading: IconButton(
