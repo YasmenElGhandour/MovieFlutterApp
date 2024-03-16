@@ -111,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
       buildWhen: (previousState, currentState) =>
       previousState.discoverRequestState != currentState.discoverRequestState,
       builder: (BuildContext context, MoviesState state) {
+        var data = state.discoverMovies;
         switch (state.discoverRequestState) {
           case RequestState.isLoading:
             //no cached data && no internet
           if(_connectionStatus == ConnectivityResult.none){
-            return state.discoverMovies?.length != 0 && state.discoverMovies?.length != null ? SizedBox(): NoInternet();
-          }
-          else  return loading();
+            return  data == null ? NoInternet() : SizedBox();
+          } else  return loading();
           case RequestState.isLoaded:
             if(state.discoverMovies?.length != 0)
             return DiscoverMoviesSlider(moviesList: state.discoverMovies!);
