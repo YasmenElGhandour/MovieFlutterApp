@@ -46,6 +46,8 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
 
             Log.d("ExceptionError", "getAllMovies Error: ${e.cause.toString()}")
             responseCode = 600
+            _detailsMovieResponse.postValue(null)
+
 
         }
 
@@ -66,6 +68,8 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
          }catch (e:Exception){
              Log.d("ExceptionError", "getAllMovies Error: ${e.cause.toString()}")
              responseCode = 600
+             _detailsMovieResponse.postValue(null)
+
 
          }
     }

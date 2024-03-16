@@ -9,6 +9,8 @@ import '../models/details_movie_models.dart';
 import '../models/discover_models.dart';
 
 abstract class MovieDataSource {
+  Future<String> getDiscoverDataFromNative(String apikey);
+  Future<String> getDetailsMovieFromNative(int movieId , String apiKey);
   Future<List<DiscoverMovies>> getDiscoverMovies(String apikey);
   Future<DetailsMovieModels> getMovieDetails(int movieId,apiKey);
 
@@ -19,6 +21,7 @@ class MovieDataSourceImpl extends MovieDataSource {
 
   static const platform=MethodChannel("com.example.movie_app_task/native");
 
+  @override
   Future<String> getDiscoverDataFromNative(String apiKey) async{
     String message;
     try{
@@ -30,6 +33,7 @@ class MovieDataSourceImpl extends MovieDataSource {
     return message;
   }
 
+  @override
   Future<String> getDetailsMovieFromNative(int movieId , String apiKey) async{
     String message;
     try{
