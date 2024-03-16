@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 
@@ -26,11 +25,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
         var data = state.discoverMovies;
         switch (state.discoverRequestState) {
           case RequestState.isLoading:
-          //no cached data && no internet
-            if(_connectionStatus == ConnectivityResult.none){
-              return  data == null ? NoInternet() : SizedBox();
-            } else  return loading();
+            return loading();
           case RequestState.isLoaded:
             if(state.discoverMovies?.length != 0)
               return DiscoverMoviesSlider(moviesList: state.discoverMovies!);
@@ -132,39 +124,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+
+  StreamSubscription? connectivitySubscription;
+  ValueNotifier<bool> isNetworkDisabled = ValueNotifier(false);
+
+  void _checkCurrentNetworkState() {
+    Connectivity().checkConnectivity().then((connectivityResult) {
+      isNetworkDisabled.value = connectivityResult == ConnectivityResult.none;
+    });
+  }
+
+  initStateFunc() {
+    _checkCurrentNetworkState();
+
+    connectivitySubscription = Connectivity().onConnectivityChanged.listen(
+          (ConnectivityResult result) {
+        isNetworkDisabled.value = result == ConnectivityResult.none;
+      },
+    );
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    initStateFunc();
     super.initState();
-    initConnectivity();
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _checkCurrentNetworkState();
+    }
   }
 
   @override
   void dispose() {
-    _connectivitySubscription.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    connectivitySubscription?.cancel();
     super.dispose();
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
-  }
-
-
-  Future<void> initConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      // developer.log('Couldn\'t check connectivity status', error: e);
-      return;
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
   }
 
 
