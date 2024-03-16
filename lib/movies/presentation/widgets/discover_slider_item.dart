@@ -59,10 +59,11 @@ class DiscoverSliderItem extends StatelessWidget {
                     height: 50,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'IMDB',
-                          style: TextStyle(fontFamily: 'AABB', fontSize: 16, color: Colors.white),
+                          style: TextStyle(fontFamily: 'AABB', fontSize: 14, color: Colors.white),
 
                         ),
                         Row(
@@ -74,7 +75,7 @@ class DiscoverSliderItem extends StatelessWidget {
                             SizedBox(width: 4,),
                             Text(
                               '${data.voteAverage?.toStringAsFixed(2)}',
-                              style: TextStyle(fontFamily: 'AABB', fontSize: 16, color: Colors.white),
+                              style: TextStyle(fontFamily: 'AABB', fontSize: 14, color: Colors.white),
 
                             ),
                           ],
