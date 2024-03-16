@@ -32,12 +32,11 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
          viewModel.getMovies(apiKey)
         viewModel.responseDiscoverMovies.observe(this, { moviesResponse ->
             moviesResponse?.let {
-                it
-                if(it != null){
+                if(it != null && viewModel.responseCode == 200 ){
                     result.success(Gson().toJson(it).toString())
 
                 }else{
-                    result.error("error","error",null)
+                    result.error(viewModel.responseCode.toString(),"error",null)
                 }
             }
         })
@@ -49,9 +48,13 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
         viewModel.getDetailsMovie(movieId,apiKey)
         viewModel.responseDetailsMovie.observe(this, { MovieDetailsResponse ->
             MovieDetailsResponse?.let {
-               if(setResult)
-                  result.success(Gson().toJson(it).toString())
-               setResult=false
+               if(setResult && it != null && viewModel.responseCode == 200 ){
+                   result.success(Gson().toJson(it).toString())
+                   setResult=false
+               }else{
+                   result.error(viewModel.responseCode.toString(),"error",null)
+               }
+
             }
         })
 

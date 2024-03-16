@@ -25,30 +25,36 @@ constructor(private val repository: MoviesRepository) : ViewModel() {
      val _detailsMovieResponse = MutableLiveData<MovieDetailsModel>()
     val responseDetailsMovie: LiveData<MovieDetailsModel>
         get() = _detailsMovieResponse
+    var responseCode = 0
 
 
     fun getMovies(apiKey: String) = viewModelScope.launch {
-        repository.getDiscoverMovies(apiKey).let { response ->
+        repository.getDiscoverMovies(apiKey)?.let { response ->
             if (response.isSuccessful) {
                 _discoverMoviesResponse.postValue(response.body())
                 Log.d("Testviewmodel" , "${response.body()?.results?.get(0)}")
 
             } else {
+                _discoverMoviesResponse.postValue(null)
                 Log.d("tag", "getAllMovies Error: ${response.code()}")
             }
+            responseCode = response.code()
+
         }
     }
 
      fun getDetailsMovie(movieId:Int , apiKey:String) = viewModelScope.launch {
-         repository.getMovieDetails(movieId = movieId, apiKey).let { response ->
+         repository.getMovieDetails(movieId = movieId, apiKey)?.let { response ->
             if (response.isSuccessful) {
                 _detailsMovieResponse.postValue(response.body())
                   Log.d("yasmenmmmm" , "${response.body()?.title}")
 
             } else {
+                _detailsMovieResponse.postValue(null)
                 Log.d("tag", "getAllMovies Error: ${response.code()}")
             }
-        }
+             responseCode = response.code()
+         }
     }
 
 
