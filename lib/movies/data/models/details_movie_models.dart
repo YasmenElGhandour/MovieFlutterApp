@@ -1,4 +1,7 @@
-class DetailsMovieModels {
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+
+class DetailsMovieModels extends Equatable {
   bool? adult;
   String? backdropPath;
   dynamic? belongsToCollection;
@@ -27,30 +30,30 @@ class DetailsMovieModels {
 
   DetailsMovieModels(
       {this.adult,
-        this.backdropPath,
-        this.belongsToCollection,
-        this.budget,
-        this.genres,
-        this.homepage,
-        this.id,
-        this.imdbId,
-        this.originalLanguage,
-        this.originalTitle,
-        this.overview,
-        this.popularity,
-        this.posterPath,
-        this.productionCompanies,
-        this.productionCountries,
-        this.releaseDate,
-        this.revenue,
-        this.runtime,
-        this.spokenLanguages,
-        this.status,
-        this.tagline,
-        this.title,
-        this.video,
-        this.voteAverage,
-        this.voteCount});
+      this.backdropPath,
+      this.belongsToCollection,
+      this.budget,
+      this.genres,
+      this.homepage,
+      this.id,
+      this.imdbId,
+      this.originalLanguage,
+      this.originalTitle,
+      this.overview,
+      this.popularity,
+      this.posterPath,
+      this.productionCompanies,
+      this.productionCountries,
+      this.releaseDate,
+      this.revenue,
+      this.runtime,
+      this.spokenLanguages,
+      this.status,
+      this.tagline,
+      this.title,
+      this.video,
+      this.voteAverage,
+      this.voteCount});
 
   DetailsMovieModels.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -140,9 +143,26 @@ class DetailsMovieModels {
     data['vote_count'] = this.voteCount;
     return data;
   }
+
+  @override
+  List<Object?> get props => [
+        adult,
+        backdropPath,
+        homepage,
+        id,
+        imdbId,
+        originalLanguage,
+        originalTitle,
+        overview,
+        spokenLanguages,
+        status,
+        tagline,
+        title,
+        video,
+      ];
 }
 
-class Genres {
+class Genres extends Equatable{
   int? id;
   String? name;
 
@@ -159,9 +179,12 @@ class Genres {
     data['name'] = this.name;
     return data;
   }
+
+  @override
+  List<Object?> get props => [id,name];
 }
 
-class ProductionCompanies {
+class ProductionCompanies extends Equatable {
   int? id;
   String? logoPath;
   String? name;
@@ -184,9 +207,12 @@ class ProductionCompanies {
     data['origin_country'] = this.originCountry;
     return data;
   }
+
+  @override
+  List<Object?> get props => [id, logoPath, name, originCountry];
 }
 
-class ProductionCountries {
+class ProductionCountries extends Equatable {
   String? iso31661;
   String? name;
 
@@ -203,9 +229,12 @@ class ProductionCountries {
     data['name'] = this.name;
     return data;
   }
+
+  @override
+  List<Object?> get props => [iso31661 , name];
 }
 
-class SpokenLanguages {
+class SpokenLanguages extends Equatable{
   String? englishName;
   String? iso6391;
   String? name;
@@ -225,4 +254,7 @@ class SpokenLanguages {
     data['name'] = this.name;
     return data;
   }
+
+  @override
+  List<Object?> get props => [englishName,iso6391,name];
 }

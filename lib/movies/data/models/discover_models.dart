@@ -1,5 +1,7 @@
 
-class DiscoverMovies{
+import 'package:equatable/equatable.dart';
+
+class DiscoverMovies extends Equatable{
   bool? adult;
   String? backdropPath;
   List<int>? genreIds;
@@ -66,5 +68,19 @@ class DiscoverMovies{
     data['vote_count'] = this.voteCount;
     return data;
   }
+
+  @override
+  List<Object?> get props => [
+    adult,
+    backdropPath,
+    id,
+    originalLanguage,
+    originalTitle,
+    overview,
+    posterPath,
+    releaseDate,
+    title,
+    video,
+ ];
 
 }

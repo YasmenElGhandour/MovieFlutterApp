@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 
 import 'core/di/injectable.dart';
 import 'movies/presentation/controller/internet_bloc.dart';
 import 'movies/presentation/screens/home_screen.dart';
+
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -16,6 +18,8 @@ void main() {
 
   runApp(const MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

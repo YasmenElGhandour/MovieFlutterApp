@@ -48,13 +48,21 @@ class MovieDataSourceImpl extends MovieDataSource {
   @override
   Future<List<DiscoverMovies>> getDiscoverMovies(String apiKey) async {
     final responseFromNative = await getDiscoverDataFromNative(apiKey);
-    if(responseFromNative != 'error' && responseFromNative != null){
+
+    try{
       var encodedString = jsonEncode(jsonDecode(responseFromNative));
       final decodeData= json.decode(encodedString)['results'] as List;
       return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
-    }else{
+    }catch (e){
       throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
     }
+    // if(responseFromNative != 'error' && responseFromNative != null){
+    //   var encodedString = jsonEncode(jsonDecode(responseFromNative));
+    //   final decodeData= json.decode(encodedString)['results'] as List;
+    //   return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
+    // }else{
+    //   throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
+    // }
 
    //  final response = await http.get(Uri.parse('https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}'));
    //  if(response.statusCode == 200){
@@ -69,13 +77,20 @@ class MovieDataSourceImpl extends MovieDataSource {
   @override
   Future<DetailsMovieModels> getMovieDetails(int movieId,apiKey) async {
      final responseFromNative = await getDetailsMovieFromNative(movieId , apiKey);
-     if(responseFromNative != 'error' && responseFromNative != null){
+     try{
        var encodedString = jsonEncode(jsonDecode(responseFromNative));
        Map<String, dynamic> valueMap = jsonDecode(encodedString);
        return DetailsMovieModels.fromJson(valueMap as Map<String, dynamic>);
-     }else{
+     }catch (e){
        throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
      }
+    // if(responseFromNative != 'error' && responseFromNative != null){
+    //   var encodedString = jsonEncode(jsonDecode(responseFromNative));
+    //   Map<String, dynamic> valueMap = jsonDecode(encodedString);
+    //   return DetailsMovieModels.fromJson(valueMap as Map<String, dynamic>);
+    // }else{
+    //   throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
+    // }
 
     // final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}'));
     //  if(response.statusCode == 200){
