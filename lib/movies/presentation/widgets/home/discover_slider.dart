@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 import 'package:movie_app_task/movies/data/models/discover_models.dart';
-import 'package:movie_app_task/movies/presentation/widgets/discover_slider_item.dart';
+import 'package:movie_app_task/movies/presentation/widgets/home/discover_slider_item.dart';
 
 
 class DiscoverMoviesSlider extends StatelessWidget {

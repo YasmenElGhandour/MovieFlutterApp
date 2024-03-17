@@ -14,8 +14,8 @@ import '../controller/discover_movie_bloc.dart';
 import '../controller/discover_movie_event.dart';
 import '../controller/discover_movie_state.dart';
 import '../controller/internet_bloc.dart';
-import '../widgets/continue_watching_banner.dart';
-import '../widgets/discover_slider.dart';
+import '../widgets/home/continue_watching_banner.dart';
+import '../widgets/home/discover_slider.dart';
 import '../widgets/loading.dart';
 import '../widgets/no_data.dart';
 
@@ -137,45 +137,5 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  StreamSubscription? connectivitySubscription;
-  ValueNotifier<bool> isNetworkDisabled = ValueNotifier(false);
 
-  void _checkCurrentNetworkState() {
-    Connectivity().checkConnectivity().then((connectivityResult) {
-      isNetworkDisabled.value = connectivityResult == ConnectivityResult.none;
-    });
-  }
-
-  initStateFunc() {
-    _checkCurrentNetworkState();
-
-    connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (ConnectivityResult result) {
-        isNetworkDisabled.value = result == ConnectivityResult.none;
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    initStateFunc();
-    super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      _checkCurrentNetworkState();
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    connectivitySubscription?.cancel();
-    super.dispose();
-  }
 }

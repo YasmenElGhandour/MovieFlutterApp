@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:movie_app_task/core/helpers/constants.dart';
 import 'package:movie_app_task/core/theme/colors.dart';
 
-import '../../data/models/discover_models.dart';
-import '../screens/details_screen.dart';
+import '../../../data/models/discover_models.dart';
+import '../../screens/details_screen.dart';
 
 class DiscoverSliderItem extends StatelessWidget {
   const DiscoverSliderItem({
