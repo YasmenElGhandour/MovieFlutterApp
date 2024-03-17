@@ -1,6 +1,5 @@
 package com.example.movie_app_task
 
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import com.example.movie_app_task.viewmodel.MoviesViewModel
@@ -25,45 +24,13 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
 
     }
 
-    fun getAllMovies(result: MethodChannel.Result, apiKey : String) {
-        viewModel.getMovies(apiKey)
-        viewModel.responseDiscoverMovies.observe(this, { moviesResponse ->
-            moviesResponse?.let {
-                if(it != null && viewModel.responseCode == 200 ){
-                    result.success(Gson().toJson(it).toString())
-
-                }else{
-                    result.error(viewModel.responseCode.toString(),"some thing went wrong",null)
-                }
-            }
-        })
-    }
-
-    fun getMovieDetails(result: MethodChannel.Result, movieId : Int, apiKey : String) {
-        var setResult=true
-        viewModel._detailsMovieResponse.value=null
-        viewModel.getDetailsMovie(movieId,apiKey)
-        viewModel.responseDetailsMovie.observe(this, { MovieDetailsResponse ->
-            MovieDetailsResponse?.let {
-               if(setResult && it != null && viewModel.responseCode == 200 ){
-                   result.success(Gson().toJson(it).toString())
-                   setResult=false
-               }else{
-                   result.error(viewModel.responseCode.toString(),"some thing went wrong",null)
-               }
-
-            }
-        })
-
-
-    }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if(call.method == "getDataFromNativeCode"){
             val hashMap = call.arguments as HashMap<*,*> //Get the arguments as a HashMap
             val apiKey = hashMap["apiKey"]
             apiKey?.let {
-                     getAllMovies(result, it as String)
+                viewModel.getMovies(it as String,result)
 
             }
         }
@@ -73,7 +40,8 @@ class MainActivity:  FlutterFragmentActivity() ,MethodChannel.MethodCallHandler 
             val movieId = hashMap["movieId"]
             apiKey?.let { apiKey
                 movieId?.let { movieId
-                       getMovieDetails(result, movieId as Int ,apiKey as String )
+                    viewModel._detailsMovieResponse.value=null
+                    viewModel.getDetailsMovie(movieId as Int ,apiKey as String,result)
                    }
             }
 
