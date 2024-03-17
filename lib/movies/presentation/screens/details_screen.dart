@@ -166,44 +166,40 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Release date',
-                  style: TextStyle(
-                      fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
-              SizedBox(
-                height: 8,
-              ),
-              Text('${state.movieDetails?.releaseDate}',
-                  style: TextStyle(
-                      fontFamily: 'AABB',
-                      fontSize: 12,
-                      color: Colours.GrayColor)),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Release date',
+                style: TextStyle(
+                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+            SizedBox(
+              height: 8,
+            ),
+            Text('${state.movieDetails?.releaseDate}',
+                style: TextStyle(
+                    fontFamily: 'AABB',
+                    fontSize: 12,
+                    color: Colours.GrayColor)),
+          ],
         ),
         SizedBox(
           width: 20,
         ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Popularity',
-                  style: TextStyle(
-                      fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
-              SizedBox(
-                height: 8,
-              ),
-              Text('${state.movieDetails?.popularity}',
-                  style: TextStyle(
-                      fontFamily: 'AABB',
-                      fontSize: 12,
-                      color: Colours.GrayColor)),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Popularity',
+                style: TextStyle(
+                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+            SizedBox(
+              height: 8,
+            ),
+            Text('${state.movieDetails?.popularity}',
+                style: TextStyle(
+                    fontFamily: 'AABB',
+                    fontSize: 12,
+                    color: Colours.GrayColor)),
+          ],
         ),
         SizedBox(
           width: 20,
