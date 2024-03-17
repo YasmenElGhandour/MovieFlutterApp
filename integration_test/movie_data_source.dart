@@ -14,7 +14,7 @@ void main() {
   setUpAll(() => {configureDependencies()});
 
   //discover movies from native ......
-  test('getDiscoverDataFromNative should not be empty', () async {
+  test('discover movies list from native not empty', () async {
     final response = await MovieDataSourceImpl().getDiscoverDataFromNative(Constants.API_KEY);
     expect(response.isNotEmpty, true);
   });
