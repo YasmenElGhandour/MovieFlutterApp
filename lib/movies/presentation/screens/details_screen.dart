@@ -27,9 +27,6 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // ),
                 background: CachedNetworkImage(
                   imageUrl:
-                      '${Constants.IMAGES_BASE_URL}${widget.movie?.posterPath}',
+                  '${Constants.IMAGES_BASE_URL}${widget.movie?.posterPath}',
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.cover,
                   errorWidget: (context, url, error) => Container(
@@ -90,7 +87,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       builder: (context, internetState) {
         return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
           buildWhen: (previousState, currentState) =>
-              previousState.movieDetailsState != currentState.movieDetailsState,
+          previousState.movieDetailsState != currentState.movieDetailsState,
           builder: (BuildContext context, MovieDetailsState state) {
             switch (state.movieDetailsState) {
               case RequestState.isLoading:
@@ -159,7 +156,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Text buildDescriptionTitle() {
     return Text('Description',
         style:
-            TextStyle(fontFamily: 'AABB', fontSize: 15, color: Colors.white));
+        TextStyle(fontFamily: 'AABB', fontSize: 15, color: Colors.white));
   }
 
   Row buildReleaseRow(MovieDetailsState state) {
@@ -169,40 +166,63 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Release date',
-                style: TextStyle(
-                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+            Text(
+              'Popularity',
+              style: TextStyle(
+                fontFamily: 'AABB',
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
             SizedBox(
               height: 8,
             ),
-            Text('${state.movieDetails?.releaseDate}',
-                style: TextStyle(
-                    fontFamily: 'AABB',
-                    fontSize: 12,
-                    color: Colours.GrayColor)),
-          ],
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Popularity',
-                style: TextStyle(
-                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+            Text(
+              '${state.movieDetails?.popularity}',
+              style: TextStyle(
+                fontFamily: 'AABB',
+                fontSize: 12,
+                color: Colours.GrayColor,
+              ),
+            ),
             SizedBox(
               height: 8,
             ),
-            Text('${state.movieDetails?.popularity}',
-                style: TextStyle(
-                    fontFamily: 'AABB',
-                    fontSize: 12,
-                    color: Colours.GrayColor)),
+            Text(
+              'Release date',
+              style: TextStyle(
+                fontFamily: 'AABB',
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              '${state.movieDetails?.releaseDate}',
+              style: TextStyle(
+                fontFamily: 'AABB',
+                fontSize: 12,
+                color: Colours.GrayColor,
+              ),
+            ),
+            SizedBox(
+              width: 20,
+            ),
           ],
         ),
         SizedBox(
-          width: 20,
+          width: 15,
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 20),
+          width: 1,
+          height: 50,
+          color: Colors.grey.withOpacity(0.2),
+        ),
+        SizedBox(
+          width: 15,
         ),
         Expanded(
           child: Column(
@@ -217,19 +237,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
               Wrap(
                 children: state.movieDetails!.genres!
                     .map((e) => Container(
-                          margin: const EdgeInsets.all(2.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(.2)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: new Text(e.name.toString() + ' ',
-                                style: TextStyle(
-                                    fontFamily: 'AABB',
-                                    fontSize: 12,
-                                    color: Colors.white)),
-                          ),
-                        ))
+                  margin: const EdgeInsets.all(2.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(.2)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: new Text(e.name.toString() + ' ',
+                        style: TextStyle(
+                            fontFamily: 'AABB',
+                            fontSize: 12,
+                            color: Colors.white)),
+                  ),
+                ))
                     .toList(),
               )
             ],
@@ -280,38 +300,5 @@ class _DetailsScreenState extends State<DetailsScreen> {
             fontWeight: FontWeight.bold));
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-  }
 
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
-  }
-
-  Future<void> initConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      // developer.log('Couldn\'t check connectivity status', error: e);
-      return;
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
-  }
 }
