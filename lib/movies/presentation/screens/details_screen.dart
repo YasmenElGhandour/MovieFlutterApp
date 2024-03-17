@@ -12,8 +12,10 @@ import '../../../core/di/injectable.dart';
 import '../../../core/helpers/constants.dart';
 import '../../../core/helpers/enums.dart';
 import '../../domain/usecases/movie_details_usecase.dart';
+import '../controller/internet_bloc.dart';
 import '../controller/movie_details_bloc.dart';
 import '../widgets/loading.dart';
+import '../widgets/no_data.dart';
 import '../widgets/no_internet.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -28,7 +30,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 //   style: TextStyle(fontFamily: 'AABB', fontSize: 16, color: Colors.white),
                 // ),
                 background: CachedNetworkImage(
-                  imageUrl: '${Constants.IMAGES_BASE_URL}${widget.movie?.posterPath}',
+                  imageUrl:
+                      '${Constants.IMAGES_BASE_URL}${widget.movie?.posterPath}',
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.cover,
                   errorWidget: (context, url, error) => Container(
@@ -66,7 +68,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       color: Colours.PrimarLightColor,
                     ),
                   ),
-
                 ),
               ),
             ),
@@ -77,67 +78,71 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  BlocBuilder<MovieDetailsBloc, MovieDetailsState> buildDetailsBloc() {
-    return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-      buildWhen: (previousState, currentState) =>
-          previousState.movieDetailsState != currentState.movieDetailsState,
-      builder: (BuildContext context, MovieDetailsState state) {
-        switch (state.movieDetailsState) {
-          case RequestState.isLoading:
-            if (_connectionStatus == ConnectivityResult.none) {
-              return state.movieDetails != null ? SizedBox(): NoInternet();
-            } else
-              return loading();
-
-          case RequestState.isLoaded:
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildTitle(state),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildWatchersRow(state),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Divider(
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildRelaseRow(state),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Divider(
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildDescriptionTitle(),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildDescription(state),
-                ],
-              ),
-            );
-          case RequestState.isError:
-            return SizedBox(
-              height: 400,
-              child: Text(
-                state.movieDetailsMessage,
-              ),
-            );
+  Widget buildDetailsBloc() {
+    return BlocConsumer<InternetBloc, InternetState>(
+      listener: (BuildContext context, internetState) {
+        if (internetState is ConnectedState) {
+          context
+              .read<MovieDetailsBloc>()
+              .add(GetMovieDetailsEvent(widget.movie.id!, Constants.API_KEY));
         }
+      },
+      builder: (context, internetState) {
+        return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+          buildWhen: (previousState, currentState) =>
+              previousState.movieDetailsState != currentState.movieDetailsState,
+          builder: (BuildContext context, MovieDetailsState state) {
+            switch (state.movieDetailsState) {
+              case RequestState.isLoading:
+                return loading();
+              case RequestState.isLoaded:
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 8,
+                      ),
+                      buildTitle(state),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      buildWatchersRow(state),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(.2),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      buildReleaseRow(state),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(.2),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      buildDescriptionTitle(),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      buildDescription(state),
+                    ],
+                  ),
+                );
+
+              case RequestState.isError:
+                if (internetState is NotConnectedState) return NoInternet();
+                return NoData('${state.movieDetailsMessage}');
+            }
+          },
+        );
       },
     );
   }
@@ -153,47 +158,52 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Text buildDescriptionTitle() {
     return Text('Description',
-        style: TextStyle(fontFamily: 'AABB', fontSize: 15, color: Colors.white));
+        style:
+            TextStyle(fontFamily: 'AABB', fontSize: 15, color: Colors.white));
   }
 
-  Row buildRelaseRow(MovieDetailsState state) {
+  Row buildReleaseRow(MovieDetailsState state) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Release date',
-                style: TextStyle(
-                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
-            SizedBox(
-              height: 8,
-            ),
-            Text('${state.movieDetails?.releaseDate}',
-                style: TextStyle(
-                    fontFamily: 'AABB',
-                    fontSize: 12,
-                    color: Colours.GrayColor)),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Release date',
+                  style: TextStyle(
+                      fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+              SizedBox(
+                height: 8,
+              ),
+              Text('${state.movieDetails?.releaseDate}',
+                  style: TextStyle(
+                      fontFamily: 'AABB',
+                      fontSize: 12,
+                      color: Colours.GrayColor)),
+            ],
+          ),
         ),
         SizedBox(
           width: 20,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Popularity',
-                style: TextStyle(
-                    fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
-            SizedBox(
-              height: 8,
-            ),
-            Text('${state.movieDetails?.popularity}',
-                style: TextStyle(
-                    fontFamily: 'AABB',
-                    fontSize: 12,
-                    color: Colours.GrayColor)),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Popularity',
+                  style: TextStyle(
+                      fontFamily: 'AABB', fontSize: 14, color: Colors.white)),
+              SizedBox(
+                height: 8,
+              ),
+              Text('${state.movieDetails?.popularity}',
+                  style: TextStyle(
+                      fontFamily: 'AABB',
+                      fontSize: 12,
+                      color: Colours.GrayColor)),
+            ],
+          ),
         ),
         SizedBox(
           width: 20,
@@ -278,7 +288,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     initConnectivity();
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   @override
@@ -292,7 +303,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
       _connectionStatus = result;
     });
   }
-
 
   Future<void> initConnectivity() async {
     late ConnectivityResult result;
@@ -308,5 +318,4 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     return _updateConnectionStatus(result);
   }
-
 }

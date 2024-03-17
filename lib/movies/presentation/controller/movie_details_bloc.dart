@@ -18,21 +18,32 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   }
 
   void _getMovieDetailsEvent(GetMovieDetailsEvent event, Emitter emit) async {
-    final result = await movieDetailsUseCase(MovieDetailsParameters(movieId: event.id, apiKey: event.apiKey));
-    result.fold(
-          (l) => emit(
-        state.copyWith(
-          movieDetailsState: RequestState.isError,
-          movieDetailsMessage: l.message,
+    try {
+
+      final result = await movieDetailsUseCase(MovieDetailsParameters(movieId: event.id, apiKey: event.apiKey));
+      result.fold(
+            (l) => emit(
+          state.copyWith(
+            movieDetailsState: RequestState.isError,
+            movieDetailsMessage: l.message,
+          ),
         ),
-      ),
-          (r) => emit(
-        state.copyWith(
-          movieDetails: r,
-          movieDetailsState: RequestState.isLoaded,
+            (r) => emit(
+          state.copyWith(
+            movieDetails: r,
+            movieDetailsState: RequestState.isLoaded,
+          ),
         ),
-      ),
-    );
+      );
+
+
+    } catch (e) {
+      emit(state.copyWith(
+        movieDetailsState: RequestState.isError,
+        movieDetailsMessage: "Something Went Wrong",
+      ));
+    }
+
   }
 
 
