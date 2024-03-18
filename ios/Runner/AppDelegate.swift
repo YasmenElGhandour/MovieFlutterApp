@@ -53,8 +53,7 @@ import Flutter
     
     func getDiscoverMovies(result : FlutterResult,apiKey:String){
          let movieManager = MovieManager()
-          movieManager.fetchDiscoverMovies(result:result,apiKey:apiKey)
-        result("result")
+         movieManager.fetchDiscoverMovies(result:result,apiKey:apiKey)
 
     }
 
@@ -62,6 +61,7 @@ import Flutter
              let movieManager = MovieManager()
            movieManager.fetchDetailsMovie(result:result,apiKey:apiKey,movieId:movieId)
            result("result")
+
 
         }
     

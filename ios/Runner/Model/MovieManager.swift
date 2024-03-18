@@ -8,28 +8,33 @@
 import UIKit
 
 struct MovieManager {
+    
         
     func fetchDiscoverMovies(result : FlutterResult , apiKey:String) {
        guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(apiKey)")
-        else {return}
+        else {return }
         let dataTask = URLSession.shared.dataTask(with: url){ (data, _, error) in
              if let error = error {
                  print("error")
              }
              if let jsonData = data {
                do {
-                   let discoverMovies = try JSONDecoder().decode([DiscoverMovies].self, from: data!)
+                   let discoverMovies : DiscoverMovies = try JSONDecoder().decode(DiscoverMovies.self, from: data!)
                    let jsonEncoder = JSONEncoder()
-                   let jsonData = try jsonEncoder.encode(discoverMovies)
-                   let json = String(data: jsonData, encoding: String.Encoding.utf8)                   
-//                  result :FlutterResult -> Error("helllp")
+                   let jsonData = try jsonEncoder.encode(data)
+                   let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                   print("discoverMovies \(discoverMovies)")
+                   result(json)
 
                } catch let decoderError {
                    print("error decoding")
+
                }
              }
 
         }.resume()
+
+
     }
     
     
@@ -42,7 +47,7 @@ struct MovieManager {
              }
              if let jsonData = data {
                do {
-                   let details = try JSONDecoder().decode([DetailsMovie].self, from: data!)
+                   let details = try JSONDecoder().decode(DetailsMovie.self, from: data!)
                    let jsonEncoder = JSONEncoder()
                    let jsonData = try jsonEncoder.encode(details)
                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
