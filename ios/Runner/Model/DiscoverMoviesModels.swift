@@ -19,7 +19,6 @@ struct DiscoverMovies: Codable {
     }
 }
 
-// MARK: - Result
 struct Result: Codable {
     let adult: Bool
     let backdropPath: String
