@@ -7,82 +7,64 @@ import Foundation
 
 // MARK: - DetailsMovie
 struct DetailsMovie: Codable {
-    let homepage: String
-    let posterPath, originalTitle: String
-    let productionCompanies: [ProductionCompany]
-    let budget: Int
-    let title: String
-    let runtime, id: Int
-    let voteAverage: Double
-    let originalLanguage: String
     let adult: Bool
-    let backdropPath: String
-    let productionCountries: [ProductionCountry]
-    let imdbID: String
-    let video: Bool
-    let tagline, overview: String
-    let popularity: Double
-    let belongsToCollection: [BelongsToCollection]
+    let backdropPath:String
+    let belongsToCollection: [BelongsCollection]
+    let budget: Int
     let genres: [Genre]
-    let revenue: Int
+    let homepage: String
+    let id: Int
+    let imdbID, originalLanguage, originalTitle, overview: String
+    let popularity: Double
+    let posterPath: String
+    let productionCompanies: [ProductionCompany]
+    let productionCountries: [ProductionCountry]
     let releaseDate: String
-    let voteCount: Int
+    let revenue, runtime: Int
     let spokenLanguages: [SpokenLanguage]
-    let status: String
+    let status, tagline, title: String
+    let video: Bool
+    let voteAverage: Double
+    let voteCount: Int
 
     enum CodingKeys: String, CodingKey {
-        case homepage
-        case posterPath = "poster_path"
-        case originalTitle = "original_title"
-        case productionCompanies = "production_companies"
-        case budget, title, runtime, id
-        case voteAverage = "vote_average"
-        case originalLanguage = "original_language"
         case adult
         case backdropPath = "backdrop_path"
-        case productionCountries = "production_countries"
+        case belongsToCollection = "belongs_to_collection"
+        case budget, genres, homepage, id
         case imdbID = "imdb_id"
-        case video, tagline, overview, popularity
-        case belongsToCollection = "belongs_to_collection"
-        case genres, revenue
+        case originalLanguage = "original_language"
+        case originalTitle = "original_title"
+        case overview, popularity
+        case posterPath = "poster_path"
+        case productionCompanies = "production_companies"
+        case productionCountries = "production_countries"
         case releaseDate = "release_date"
-        case voteCount = "vote_count"
+        case revenue, runtime
         case spokenLanguages = "spoken_languages"
-        case status
+        case status, tagline, title, video
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
     }
-}
-
-// MARK: - BelongsToCollection
-struct BelongsToCollection: Codable {
-    let id: Int?
-    let belongsToCollection:String
-    let debugDescription:String?
-
-    enum CodingKeys: String, CodingKey {
-        case belongsToCollection = "belongs_to_collection"
-        case id
-        case debugDescription="debugDescription"
-    }
-    
 }
 
 // MARK: - Genre
 struct Genre: Codable {
-    let name: String
     let id: Int
+    let name: String
 }
 
 // MARK: - ProductionCompany
 struct ProductionCompany: Codable {
-    let name, originCountry: String
-    let logoPath: String?
     let id: Int
+    let logoPath: String?
+    let name, originCountry: String
 
     enum CodingKeys: String, CodingKey {
+        case id
+        case logoPath = "logo_path"
         case name
         case originCountry = "origin_country"
-        case logoPath = "logo_path"
-        case id
     }
 }
 
@@ -98,11 +80,30 @@ struct ProductionCountry: Codable {
 
 // MARK: - SpokenLanguage
 struct SpokenLanguage: Codable {
-    let name, iso639_1, englishName: String
+    let englishName, iso639_1, name: String
 
     enum CodingKeys: String, CodingKey {
-        case name
-        case iso639_1 = "iso_639_1"
         case englishName = "english_name"
+        case iso639_1 = "iso_639_1"
+        case name
     }
 }
+
+//struct BelongsToCollection: Codable {
+//    let id: Int
+//}
+
+
+struct BelongsCollection: Codable {
+    let id: Int
+    let belongsToCollection: String?
+    let debugDescription: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case belongsToCollection = "belongs_to_collection"
+        case debugDescription = "debugDescription"
+
+    }
+}
+
