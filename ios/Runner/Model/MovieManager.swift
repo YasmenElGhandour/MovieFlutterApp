@@ -16,6 +16,9 @@ struct MovieManager {
         let dataTask = URLSession.shared.dataTask(with: url){ (data,response, error) in
              if let error = error {
                  print("error")
+                 result(FlutterError(code: "UNAVAILABLE",
+                                     message: "Server Error",
+                                     details: nil))
              }
              if let jsonData = data {
                do {
@@ -27,6 +30,9 @@ struct MovieManager {
                  //  result(discoverMovies) // Pass through the FlutterError
                } catch let decoderError {
                    print("error decoding")
+                   result(FlutterError(code: "UNAVAILABLE",
+                                       message: "Server Error",
+                                       details: nil))
                }
              }
 
@@ -36,48 +42,37 @@ struct MovieManager {
 
     
     func fetchDetailsMovie(result : @escaping FlutterResult , apiKey:String , movieId:Int) {
+        print("testttttt")
        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)")
         else {return}
-        let dataTask = URLSession.shared.dataTask(with: url){ (data, _, error) in
+        let dataTask = URLSession.shared.dataTask(with: url){ (data, response, error) in
              if let error = error {
-                 print("error")
+                 result(FlutterError(code: "UNAVAILABLE details",
+                                     message: "Server Error",
+                                     details: nil))
              }
+            print("details \(data)")
+
              if let jsonData = data {
                do {
                    let details = try JSONDecoder().decode(DetailsMovie.self, from: data!)
-                  // let jsonData = try JSONEncoder().encode(details)
-                   let jsonData = try JSONEncoder().encode(details)
-                    let jsonString = String(data: jsonData, encoding: .utf8)!
-                    print("jsonStringdetails \(jsonString)")
-                    result(jsonString)
+                   print("details \(details)")
+//                   let jsonData = try JSONEncoder().encode(details)
+//                    let jsonString = String(data: jsonData, encoding: .utf8)!
+  //                  print("jsonStringdetails \(jsonString)")
+                    result(details)
                } catch let decoderError {
-                   print("error decoding")
+                   print("error decoding \(decoderError)")
+                   result(FlutterError(code: "UNAVAILABLE",
+                                       message: "Server Error",
+                                       details: nil))
+                   
                }
              }
 
         }.resume()
     }
+
     
 }
 
-//extension Encodable {
-//
-//    /// Converting object to postable dictionary
-//    func toDictionary(_ encoder: JSONEncoder = JSONEncoder()) throws -> [String: Any] {
-//        let data = try encoder.encode(self)
-//        let object = try JSONSerialization.jsonObject(with: data)
-//        if let json = object as? [String: Any]  { return json }
-//        
-//        let context = DecodingError.Context(codingPath: [], debugDescription: "Deserialized object is not a dictionary")
-//        throw DecodingError.typeMismatch(type(of: object), context)
-//    }
-//}
-//
-//extension Encodable {
-//    /// Converting object to postable JSON
-//    func toJSON(_ encoder: JSONEncoder = JSONEncoder()) throws -> NSString {
-//        let data = try encoder.encode(self)
-//        let result = String(decoding: data, as: UTF8.self)
-//        return NSString(string: result)
-//    }
-//}

@@ -25,7 +25,6 @@ class MovieDataSourceImpl extends MovieDataSource {
   Future<String> getDiscoverDataFromNative(String apiKey) async{
     String message;
     try{
-
       message = await platform.invokeMethod("getDataFromNativeCode", {"apiKey":apiKey});
     }on PlatformException catch(e){
       message = 'Error : ${e.message}';
@@ -38,10 +37,13 @@ class MovieDataSourceImpl extends MovieDataSource {
   Future<String> getDetailsMovieFromNative(int movieId , String apiKey) async{
     String message;
     try{
+      print('response from native ${movieId} ${apiKey}');
       message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
       print('response from native ${message}');
-    }on PlatformException catch(e){
-      message = 'Error : ${e.message}';
+    } catch(e){
+      message = 'Error : ${e}';
+      print('getDetailsMovieFromNative error ${message}');
+
     }
     return message;
   }
@@ -54,26 +56,11 @@ class MovieDataSourceImpl extends MovieDataSource {
       final decodeData= json.decode(encodedString)['results'] as List;
       return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
     }catch (e){
-      print(' response from native ${e}');
+    //  print(' response from native ${e}');
       throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
 
     }
-    // if(responseFromNative != 'error' && responseFromNative != null){
-    //   var encodedString = jsonEncode(jsonDecode(responseFromNative));
-    //   final decodeData= json.decode(encodedString)['results'] as List;
-    //   return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
-    // }else{
-    //   throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
-    // }
 
-   //  final response = await http.get(Uri.parse('https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}'));
-   //  if(response.statusCode == 200){
-   //    final decodeData= json.decode(response.body)['results'] as List;
-   //    return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
-   //  }else
-   //  {
-   //    throw ServerException(ErrorMessageModel.fromJson(response.headers));
-   //  }
   }
 
   @override

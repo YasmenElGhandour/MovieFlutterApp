@@ -20,17 +20,17 @@ import Flutter
             case "getDataFromNativeCode":
             guard let arguments = call.arguments as? [String: String] else {return}
              let apiKey = arguments["apiKey"]!
-                print("channelllllllll11111")
               self.getDiscoverMovies(result: result, apiKey: apiKey)
 
             case "getDetails":
-                guard let arguments = call.arguments as? [String: String] else {return}
-                let apiKey = arguments["apiKey"]!
-                let movieIdString = arguments["movieId"]!
-                let movieId = Int(movieIdString)!
-                print("channelll222222222222")
-
-                self.getDetails(result:result,apiKey:apiKey,movieId:movieId)
+                print("channellllllll22")
+//                guard let arguments = call.arguments as? [String: String] else {return}
+//                let apiKey = arguments["apiKey"]!
+//                let movieIdString = arguments["movieId"]!
+//                let movieId = Int(movieIdString)!
+              //  print("movieIdString \(apiKey)")
+                self.getDetails(result:result,apiKey:"c4c77dec8838783e8651d15e92df4606",movieId:969492)
+      
 
             default:
                 result(FlutterMethodNotImplemented)

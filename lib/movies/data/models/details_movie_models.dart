@@ -1,94 +1,104 @@
+import 'dart:ffi';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class DetailsMovieModels extends Equatable {
+
+class DetailsMovieModels extends Equatable{
+  String? homepage;
+  String? posterPath;
+  String? originalTitle;
+  List<ProductionCompanies>? productionCompanies;
+  int? budget;
+  String? title;
+  int? runtime;
+  int? id;
+  double? voteAverage;
+  String? originalLanguage;
   bool? adult;
   String? backdropPath;
-  dynamic? belongsToCollection;
-  int? budget;
-  List<Genres>? genres;
-  String? homepage;
-  int? id;
+  List<ProductionCountries>? productionCountries;
   String? imdbId;
-  String? originalLanguage;
-  String? originalTitle;
+  bool? video;
+  String? tagline;
   String? overview;
   double? popularity;
-  String? posterPath;
-  List<ProductionCompanies>? productionCompanies;
-  List<ProductionCountries>? productionCountries;
-  String? releaseDate;
+  BelongsToCollection? belongsToCollection;
+  List<Genres>? genres;
   int? revenue;
-  int? runtime;
+  String? releaseDate;
+  int? voteCount;
   List<SpokenLanguages>? spokenLanguages;
   String? status;
-  String? tagline;
-  String? title;
-  bool? video;
-  double? voteAverage;
-  int? voteCount;
 
   DetailsMovieModels(
-      {this.adult,
-      this.backdropPath,
-      this.belongsToCollection,
-      this.budget,
-      this.genres,
-      this.homepage,
-      this.id,
-      this.imdbId,
-      this.originalLanguage,
-      this.originalTitle,
-      this.overview,
-      this.popularity,
-      this.posterPath,
-      this.productionCompanies,
-      this.productionCountries,
-      this.releaseDate,
-      this.revenue,
-      this.runtime,
-      this.spokenLanguages,
-      this.status,
-      this.tagline,
-      this.title,
-      this.video,
-      this.voteAverage,
-      this.voteCount});
+      {this.homepage,
+        this.posterPath,
+        this.originalTitle,
+        this.productionCompanies,
+        this.budget,
+        this.title,
+        this.runtime,
+        this.id,
+        this.voteAverage,
+        this.originalLanguage,
+        this.adult,
+        this.backdropPath,
+        this.productionCountries,
+        this.imdbId,
+        this.video,
+        this.tagline,
+        this.overview,
+        this.popularity,
+        this.belongsToCollection,
+        this.genres,
+        this.revenue,
+        this.releaseDate,
+        this.voteCount,
+        this.spokenLanguages,
+        this.status});
 
   DetailsMovieModels.fromJson(Map<String, dynamic> json) {
-    adult = json['adult'];
-    backdropPath = json['backdrop_path'];
-    belongsToCollection = json['belongs_to_collection'];
-    budget = json['budget'];
-    if (json['genres'] != null) {
-      genres = <Genres>[];
-      json['genres'].forEach((v) {
-        genres!.add(new Genres.fromJson(v));
-      });
-    }
     homepage = json['homepage'];
-    id = json['id'];
-    imdbId = json['imdb_id'];
-    originalLanguage = json['original_language'];
-    originalTitle = json['original_title'];
-    overview = json['overview'];
-    popularity = json['popularity'];
     posterPath = json['poster_path'];
+    originalTitle = json['original_title'];
     if (json['production_companies'] != null) {
       productionCompanies = <ProductionCompanies>[];
       json['production_companies'].forEach((v) {
         productionCompanies!.add(new ProductionCompanies.fromJson(v));
       });
     }
+    budget = json['budget'];
+    title = json['title'];
+    runtime = json['runtime'];
+    id = json['id'];
+    voteAverage = json['vote_average'];
+    originalLanguage = json['original_language'];
+    adult = json['adult'];
+    backdropPath = json['backdrop_path'];
     if (json['production_countries'] != null) {
       productionCountries = <ProductionCountries>[];
       json['production_countries'].forEach((v) {
         productionCountries!.add(new ProductionCountries.fromJson(v));
       });
     }
-    releaseDate = json['release_date'];
+    imdbId = json['imdb_id'];
+    video = json['video'];
+    tagline = json['tagline'];
+    overview = json['overview'];
+    popularity = json['popularity'];
+    belongsToCollection = json['belongs_to_collection'] != null
+        ? new BelongsToCollection.fromJson(json['belongs_to_collection'])
+        : null;
+    if (json['genres'] != null) {
+      genres = <Genres>[];
+      json['genres'].forEach((v) {
+        genres!.add(new Genres.fromJson(v));
+      });
+    }
     revenue = json['revenue'];
-    runtime = json['runtime'];
+    releaseDate = json['release_date'];
+    voteCount = json['vote_count'];
     if (json['spoken_languages'] != null) {
       spokenLanguages = <SpokenLanguages>[];
       json['spoken_languages'].forEach((v) {
@@ -96,87 +106,89 @@ class DetailsMovieModels extends Equatable {
       });
     }
     status = json['status'];
-    tagline = json['tagline'];
-    title = json['title'];
-    video = json['video'];
-    voteAverage = json['vote_average'];
-    voteCount = json['vote_count'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['adult'] = this.adult;
-    data['backdrop_path'] = this.backdropPath;
-    data['belongs_to_collection'] = this.belongsToCollection;
-    data['budget'] = this.budget;
-    if (this.genres != null) {
-      data['genres'] = this.genres!.map((v) => v.toJson()).toList();
-    }
     data['homepage'] = this.homepage;
-    data['id'] = this.id;
-    data['imdb_id'] = this.imdbId;
-    data['original_language'] = this.originalLanguage;
-    data['original_title'] = this.originalTitle;
-    data['overview'] = this.overview;
-    data['popularity'] = this.popularity;
     data['poster_path'] = this.posterPath;
+    data['original_title'] = this.originalTitle;
     if (this.productionCompanies != null) {
       data['production_companies'] =
           this.productionCompanies!.map((v) => v.toJson()).toList();
     }
+    data['budget'] = this.budget;
+    data['title'] = this.title;
+    data['runtime'] = this.runtime;
+    data['id'] = this.id;
+    data['vote_average'] = this.voteAverage;
+    data['original_language'] = this.originalLanguage;
+    data['adult'] = this.adult;
+    data['backdrop_path'] = this.backdropPath;
     if (this.productionCountries != null) {
       data['production_countries'] =
           this.productionCountries!.map((v) => v.toJson()).toList();
     }
-    data['release_date'] = this.releaseDate;
+    data['imdb_id'] = this.imdbId;
+    data['video'] = this.video;
+    data['tagline'] = this.tagline;
+    data['overview'] = this.overview;
+    data['popularity'] = this.popularity;
+    if (this.belongsToCollection != null) {
+      data['belongs_to_collection'] = this.belongsToCollection!.toJson();
+    }
+    if (this.genres != null) {
+      data['genres'] = this.genres!.map((v) => v.toJson()).toList();
+    }
     data['revenue'] = this.revenue;
-    data['runtime'] = this.runtime;
+    data['release_date'] = this.releaseDate;
+    data['vote_count'] = this.voteCount;
     if (this.spokenLanguages != null) {
       data['spoken_languages'] =
           this.spokenLanguages!.map((v) => v.toJson()).toList();
     }
     data['status'] = this.status;
-    data['tagline'] = this.tagline;
-    data['title'] = this.title;
-    data['video'] = this.video;
-    data['vote_average'] = this.voteAverage;
-    data['vote_count'] = this.voteCount;
     return data;
   }
 
   @override
   List<Object?> get props => [
-        adult,
-        backdropPath,
-        homepage,
-        id,
-        imdbId,
-        originalLanguage,
-        originalTitle,
-        overview,
-        spokenLanguages,
-        status,
-        tagline,
-        title,
-        video,
-      ];
+    adult,
+    homepage,
+    id,
+    imdbId,
+    originalLanguage,
+    originalTitle,
+    overview,
+    spokenLanguages,
+    status,
+    tagline,
+    title,
+    video,
+  ];
 }
 
-class Genres extends Equatable{
-  int? id;
+class ProductionCompanies extends Equatable {
   String? name;
+  String? originCountry;
+  String? logoPath;
+  int? id;
 
-  Genres({this.id, this.name});
+  ProductionCompanies({this.name, this.originCountry, this.logoPath, this.id});
 
-  Genres.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  ProductionCompanies.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    originCountry = json['origin_country'];
+    logoPath = json['logo_path'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     data['name'] = this.name;
+    data['origin_country'] = this.originCountry;
+    data['logo_path'] = this.logoPath;
+    data['id'] = this.id;
     return data;
   }
 
@@ -184,35 +196,7 @@ class Genres extends Equatable{
   List<Object?> get props => [id,name];
 }
 
-class ProductionCompanies extends Equatable {
-  int? id;
-  String? logoPath;
-  String? name;
-  String? originCountry;
-
-  ProductionCompanies({this.id, this.logoPath, this.name, this.originCountry});
-
-  ProductionCompanies.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    logoPath = json['logo_path'];
-    name = json['name'];
-    originCountry = json['origin_country'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['logo_path'] = this.logoPath;
-    data['name'] = this.name;
-    data['origin_country'] = this.originCountry;
-    return data;
-  }
-
-  @override
-  List<Object?> get props => [id, logoPath, name, originCountry];
-}
-
-class ProductionCountries extends Equatable {
+class ProductionCountries extends Equatable{
   String? iso31661;
   String? name;
 
@@ -229,32 +213,74 @@ class ProductionCountries extends Equatable {
     data['name'] = this.name;
     return data;
   }
-
   @override
   List<Object?> get props => [iso31661 , name];
 }
 
-class SpokenLanguages extends Equatable{
-  String? englishName;
-  String? iso6391;
-  String? name;
+class BelongsToCollection extends Equatable {
+  int? id;
 
-  SpokenLanguages({this.englishName, this.iso6391, this.name});
+  BelongsToCollection({this.id});
 
-  SpokenLanguages.fromJson(Map<String, dynamic> json) {
-    englishName = json['english_name'];
-    iso6391 = json['iso_639_1'];
-    name = json['name'];
+  BelongsToCollection.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['english_name'] = this.englishName;
-    data['iso_639_1'] = this.iso6391;
+    data['id'] = this.id;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class Genres extends Equatable {
+  String? name;
+  int? id;
+
+  Genres({this.name, this.id});
+
+  Genres.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
+    data['id'] = this.id;
+    return data;
+  }
+  @override
+  List<Object?> get props => [id,name];
+}
+
+class SpokenLanguages extends Equatable{
+  String? name;
+  String? iso6391;
+  String? englishName;
+
+  SpokenLanguages({this.name, this.iso6391, this.englishName});
+
+  SpokenLanguages.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    iso6391 = json['iso_639_1'];
+    englishName = json['english_name'];
+
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['iso_639_1'] = this.iso6391;
+    data['english_name'] = this.englishName;
     return data;
   }
 
   @override
   List<Object?> get props => [englishName,iso6391,name];
+
 }
