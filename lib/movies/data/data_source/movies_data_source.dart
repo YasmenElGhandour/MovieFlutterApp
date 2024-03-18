@@ -25,8 +25,10 @@ class MovieDataSourceImpl extends MovieDataSource {
   Future<String> getDiscoverDataFromNative(String apiKey) async{
     String message;
     try{
+      print(' ppppppppp');
+
       message = await platform.invokeMethod("getDataFromNativeCode", {"apiKey":apiKey});
-   //   print('response from native ${message}');
+      print(' ppppppppp message${message}');
     }on PlatformException catch(e){
       message = 'Error : ${e.message}';
     }
@@ -48,13 +50,14 @@ class MovieDataSourceImpl extends MovieDataSource {
   @override
   Future<List<DiscoverMovies>> getDiscoverMovies(String apiKey) async {
     final responseFromNative = await getDiscoverDataFromNative(apiKey);
-
     try{
       var encodedString = jsonEncode(jsonDecode(responseFromNative));
       final decodeData= json.decode(encodedString)['results'] as List;
       return decodeData.map((movie) => DiscoverMovies.fromJson(movie)).toList();
     }catch (e){
+      print(' response from native ${e}');
       throw ServerException(ErrorMessageModel(statusCode: 400, success: false, statusMessage: 'server error',));
+
     }
     // if(responseFromNative != 'error' && responseFromNative != null){
     //   var encodedString = jsonEncode(jsonDecode(responseFromNative));

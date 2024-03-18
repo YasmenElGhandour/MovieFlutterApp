@@ -25,7 +25,15 @@ import Flutter
                 // Handle missing or invalid arguments
                 return
             }
-            self.getDiscoverMovies(result:result,apiKey:apiKey)
+            
+            
+            Task {
+                 if let error = await self.getDiscoverMovies(apiKey: apiKey) {
+                   result(error) // Pass through the FlutterError
+                 } else {
+                   result("success") // Or any success message you prefer
+                 }
+               }
             
             
             //.........details ...........
@@ -51,11 +59,18 @@ import Flutter
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     
-    func getDiscoverMovies(result : FlutterResult,apiKey:String){
-         let movieManager = MovieManager()
-         movieManager.fetchDiscoverMovies(result:result,apiKey:apiKey)
 
+    func getDiscoverMovies( apiKey: String) async -> String? {
+      let movieManager = MovieManager()
+        let movies =  await movieManager.fetchDiscoverMovies(apiKey: apiKey)
+        let json = String(describing: movies)
+        print("okkkkk")
+        print(json)
+        
+        return json
     }
+    
+
 
        func getDetails(result : FlutterResult,apiKey:String,movieId:Int){
              let movieManager = MovieManager()
@@ -65,8 +80,4 @@ import Flutter
 
         }
     
-    //                 result(FlutterError(code:"UnAvailable" ,
-    //                                     message:"message from swift is empty" , details:nil
-    //
-    //                                    ))
 }
