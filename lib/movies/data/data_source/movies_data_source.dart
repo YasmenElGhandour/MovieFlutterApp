@@ -25,15 +25,11 @@ class MovieDataSourceImpl extends MovieDataSource {
   Future<String> getDiscoverDataFromNative(String apiKey) async{
     String message;
     try{
-      print(' ppppppppp');
 
       message = await platform.invokeMethod("getDataFromNativeCode", {"apiKey":apiKey});
-      print(' ppppppppp message${message}');
     }on PlatformException catch(e){
       message = 'Error : ${e.message}';
-      print('discover test2 ${message}');
     }
-    print('discover test ${message}');
 
     return message;
   }
@@ -43,7 +39,7 @@ class MovieDataSourceImpl extends MovieDataSource {
     String message;
     try{
       message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
-    //  print('response from native ${message}');
+      print('response from native ${message}');
     }on PlatformException catch(e){
       message = 'Error : ${e.message}';
     }

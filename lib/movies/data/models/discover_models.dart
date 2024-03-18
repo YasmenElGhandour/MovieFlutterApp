@@ -4,18 +4,18 @@ import 'package:equatable/equatable.dart';
 class DiscoverMovies extends Equatable{
   bool? adult;
   String? backdropPath;
-  List<int>? genreIds;
-  int? id;
+  List<num>? genreIds;
+  num? id;
   String? originalLanguage;
   String? originalTitle;
   String? overview;
-  double? popularity;
+  num? popularity;
   String? posterPath;
   String? releaseDate;
   String? title;
   bool? video;
-  double? voteAverage;
-  int? voteCount;
+  num? voteAverage;
+  num? voteCount;
 
   DiscoverMovies(
       {this.adult,

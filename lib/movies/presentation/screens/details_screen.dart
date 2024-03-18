@@ -37,7 +37,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => MovieDetailsBloc(getIt<MovieDetailsUseCase>())
-        ..add(GetMovieDetailsEvent(widget.movie!.id!, Constants.API_KEY)),
+        ..add(GetMovieDetailsEvent(widget.movie!.id!.toInt()!, Constants.API_KEY)),
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
@@ -86,7 +86,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         if (internetState is ConnectedState) {
           context
               .read<MovieDetailsBloc>()
-              .add(GetMovieDetailsEvent(widget.movie.id!, Constants.API_KEY));
+              .add(GetMovieDetailsEvent(widget.movie.id!.toInt()!, Constants.API_KEY));
         }
       },
       builder: (context, internetState) {

@@ -20,6 +20,7 @@ import Flutter
             case "getDataFromNativeCode":
             guard let arguments = call.arguments as? [String: String] else {return}
              let apiKey = arguments["apiKey"]!
+                print("channelllllllll11111")
               self.getDiscoverMovies(result: result, apiKey: apiKey)
 
             case "getDetails":
@@ -27,7 +28,8 @@ import Flutter
                 let apiKey = arguments["apiKey"]!
                 let movieIdString = arguments["movieId"]!
                 let movieId = Int(movieIdString)!
-                
+                print("channelll222222222222")
+
                 self.getDetails(result:result,apiKey:apiKey,movieId:movieId)
 
             default:
