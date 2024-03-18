@@ -23,10 +23,13 @@ import Flutter
               self.getDiscoverMovies(result: result, apiKey: apiKey)
 
             case "getDetails":
+                print("channellllllll22")
                 guard let arguments = call.arguments as? [String: String] else {return}
                 let movieIdString = arguments["movieId"]!
                 let movieId = Int(movieIdString)!
+              //  print("movieIdString \(apiKey)")
                 self.getDetails(result:result,apiKey:"c4c77dec8838783e8651d15e92df4606",movieId:movieId)
+      
 
             default:
                 result(FlutterMethodNotImplemented)

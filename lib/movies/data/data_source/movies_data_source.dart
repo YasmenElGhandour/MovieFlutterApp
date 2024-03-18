@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -38,7 +40,11 @@ class MovieDataSourceImpl extends MovieDataSource {
     String message;
     try{
       print('response from native ${movieId} ${apiKey}');
-      message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
+      if (Platform.isAndroid) {
+        message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
+    } else
+      message = await platform.invokeMethod("getDetails", {"movieId":movieId.toString()});
+
       print('response from native ${message}');
     } catch(e){
       message = 'Error : ${e}';
