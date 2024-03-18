@@ -15,43 +15,24 @@ import Flutter
         channel.setMethodCallHandler({
           (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             
-            guard call.method == "getDataFromNativeCode" else {
+            switch call.method {
+                
+            case "getDataFromNativeCode":
+            guard let arguments = call.arguments as? [String: String] else {return}
+             let apiKey = arguments["apiKey"]!
+              self.getDiscoverMovies(result: result, apiKey: apiKey)
+
+            case "getDetails":
+                guard let arguments = call.arguments as? [String: String] else {return}
+                let apiKey = arguments["apiKey"]!
+                let movieIdString = arguments["movieId"]!
+                let movieId = Int(movieIdString)!
+                
+                self.getDetails(result:result,apiKey:apiKey,movieId:movieId)
+
+            default:
                 result(FlutterMethodNotImplemented)
-                return
             }
-            guard let arguments = call.arguments as? [String: Any],
-                  let apiKey = arguments["apiKey"] as? String
-            else {
-                // Handle missing or invalid arguments
-                return
-            }
-            
-            
-            Task {
-                 if let error = await self.getDiscoverMovies(apiKey: apiKey) {
-                   result(error) // Pass through the FlutterError
-                 } else {
-                   result("success") // Or any success message you prefer
-                 }
-               }
-            
-            
-            //.........details ...........
-            guard call.method == "getDetails" else {
-                result(FlutterMethodNotImplemented)
-                return
-            }
-            guard let arguments = call.arguments as? [String: Any],
-                  let apiKey = arguments["apiKey"] as? String,
-                  let movieIdString = arguments["movieId"] as? String,
-                  let movieId = Int(movieIdString)
-            else {
-                // Handle missing or invalid arguments gracefully
-                // Provide appropriate error messaging or fallback behavior
-                return
-            }
-            
-            self.getDetails(result:result,apiKey:apiKey,movieId:movieId)
             
         })
       
@@ -60,24 +41,17 @@ import Flutter
   }
     
 
-    func getDiscoverMovies( apiKey: String) async -> String? {
+
+    func getDiscoverMovies(result: @escaping FlutterResult , apiKey: String){
       let movieManager = MovieManager()
-        let movies =  await movieManager.fetchDiscoverMovies(apiKey: apiKey)
-        let json = String(describing: movies)
-        print("okkkkk")
-        print(json)
-        
-        return json
+      movieManager.fetchDiscoverMovies(result:result,apiKey: apiKey)
     }
     
 
 
-       func getDetails(result : FlutterResult,apiKey:String,movieId:Int){
-             let movieManager = MovieManager()
+       func getDetails(result : @escaping FlutterResult,apiKey:String,movieId:Int){
+        let movieManager = MovieManager()
            movieManager.fetchDetailsMovie(result:result,apiKey:apiKey,movieId:movieId)
-           result("result")
-
-
         }
     
 }

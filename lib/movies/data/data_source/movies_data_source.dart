@@ -31,7 +31,10 @@ class MovieDataSourceImpl extends MovieDataSource {
       print(' ppppppppp message${message}');
     }on PlatformException catch(e){
       message = 'Error : ${e.message}';
+      print('discover test2 ${message}');
     }
+    print('discover test ${message}');
+
     return message;
   }
 
