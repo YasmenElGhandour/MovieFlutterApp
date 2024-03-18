@@ -19,8 +19,8 @@ struct MovieManager {
              if let jsonData = data {
                do {
                    let discoverMovies = try JSONDecoder().decode(DiscoverMovies.self, from: data!)
-                   let json = String(describing: discoverMovies)
-                   result(json) // Pass through the FlutterError
+                   //convert discoverMovies model to json then to string 
+                   result(discoverMovies) // Pass through the FlutterError
                } catch let decoderError {
                    print("error decoding")
                }
