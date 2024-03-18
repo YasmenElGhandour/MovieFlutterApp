@@ -37,10 +37,9 @@ class MovieDataSourceImpl extends MovieDataSource {
   Future<String> getDetailsMovieFromNative(int movieId , String apiKey) async{
     String message;
     try{
-      // print('response from native ${movieId} ${apiKey}');
-
-      message = await platform.invokeMethod("getDetails",{'movieId': movieId.toString()}  );
-      // print('response from native ${message}');
+      print('response from native ${movieId} ${apiKey}');
+      message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
+      print('response from native ${message}');
     } catch(e){
       message = 'Error : ${e}';
       print('getDetailsMovieFromNative error ${message}');
