@@ -8,8 +8,8 @@ import Foundation
 // MARK: - DetailsMovie
 struct DetailsMovie: Codable {
     let adult: Bool
-    let backdropPath:String
-    let belongsToCollection: [BelongsCollection]?
+    let backdropPath: String
+    let belongsToCollection: BelongsToCollection?
     let budget: Int
     let genres: [Genre]
     let homepage: String
@@ -45,6 +45,18 @@ struct DetailsMovie: Codable {
         case status, tagline, title, video
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+    }
+}
+
+// MARK: - BelongsToCollection
+struct BelongsToCollection: Codable {
+    let id: Int
+    let name, posterPath, backdropPath: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case posterPath = "poster_path"
+        case backdropPath = "backdrop_path"
     }
 }
 
@@ -88,22 +100,3 @@ struct SpokenLanguage: Codable {
         case name
     }
 }
-
-//struct BelongsToCollection: Codable {
-//    let id: Int
-//}
-
-
-struct BelongsCollection: Codable {
-    let id: Int
-    let belongsToCollection: String?
-    let debugDescription: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case belongsToCollection = "belongs_to_collection"
-        case debugDescription = "debugDescription"
-
-    }
-}
-
