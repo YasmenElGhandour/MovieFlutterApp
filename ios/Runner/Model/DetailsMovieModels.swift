@@ -9,7 +9,7 @@ import Foundation
 struct DetailsMovie: Codable {
     let adult: Bool
     let backdropPath:String
-    let belongsToCollection: [BelongsCollection]
+    let belongsToCollection: [BelongsCollection]?
     let budget: Int
     let genres: [Genre]
     let homepage: String
