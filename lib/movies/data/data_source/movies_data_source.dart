@@ -43,7 +43,7 @@ class MovieDataSourceImpl extends MovieDataSource {
       if (Platform.isAndroid) {
         message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId});
     } else
-      message = await platform.invokeMethod("getDetails", {"movieId":movieId.toString()});
+      message = await platform.invokeMethod("getDetails", {"apiKey":apiKey,"movieId":movieId.toString()});
 
       print('response from native ${message}');
     } catch(e){
